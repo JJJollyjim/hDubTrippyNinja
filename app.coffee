@@ -5,9 +5,15 @@ cluster = require "cluster"
 
 if cluster.isMaster
 	cpus = require("os").cpus()
+	console.log "Forking #{cpus.length} processes"
+
 	cluster.fork() for cpu in cpus
 
-	console.log "Forked #{cpus.length} processes"
+	# If a worker dies, restart it
+	cluster.on "exit", (worker) ->
+		console.error "Worker #{worker.id} died!"
+		console.log "Reforking..."
+		cluster.fork()
 
 else
 	routes =
