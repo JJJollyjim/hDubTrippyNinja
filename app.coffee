@@ -36,8 +36,8 @@ else
 		next()
 
 	# Setup routes
-	app.get "/login", routes.login.handle
-	app.get "/sync", routes.sync.handle
+	app.post "/login", routes.login.handle
+	app.post "/sync", routes.sync.handle
 
 	# Error handler
 	if app.get("env") is "development" then app.use express.errorHandler()
