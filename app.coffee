@@ -1,39 +1,47 @@
 express = require "express"
 http = require "http"
 path = require "path"
+cluster = require "cluster"
 
-routes =
-  login: require "./routes/login"
-  sync: require "./routes/sync"
+if cluster.isMaster
+	cpus = require("os").cpus()
+	cluster.fork() for cpu in cpus
 
-app = express()
+	console.log "Forked #{cpus.length} processes"
 
-# Set port to $PORT or (if that's not set) 3000
-app.set "port", process.env.PORT or 3000
+else
+	routes =
+	  login: require "./routes/login"
+	  sync: require "./routes/sync"
 
-# Required, even though we're not using it
-app.set "view engine", "jade"
+	app = express()
 
-# Enable server logs
-app.use express.logger("dev")
+	# Set port to $PORT or (if that's not set) 3000
+	app.set "port", process.env.PORT or 3000
 
-# Parses POST body
-app.use express.bodyParser()
+	# Required, even though we're not using it
+	app.set "view engine", "jade"
 
-# Not really sure what this does...
-app.use app.router
+	# Enable server logs
+	app.use express.logger("dev")
 
-app.use (req, res, next) ->
-	console.log(req.body)
-	next()
+	# Parses POST body
+	app.use express.bodyParser()
 
-# Setup routes
-app.get "/login", routes.login.handle
-app.get "/sync", routes.sync.handle
+	# Not really sure what this does...
+	app.use app.router
 
-# Error handler
-if app.get("env") is "development" then app.use express.errorHandler()
+	app.use (req, res, next) ->
+		console.log(req.body)
+		next()
 
-# Start server
-http.createServer(app).listen app.get("port"), ->
-  console.log "Express server listening on port " + app.get("port")
+	# Setup routes
+	app.get "/login", routes.login.handle
+	app.get "/sync", routes.sync.handle
+
+	# Error handler
+	if app.get("env") is "development" then app.use express.errorHandler()
+
+	# Start server
+	http.createServer(app).listen app.get("port"), ->
+	  console.log "Express server listening on port #{app.get("port")}. Worker id #{cluster.worker.id}"
