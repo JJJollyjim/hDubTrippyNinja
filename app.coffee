@@ -37,10 +37,6 @@ else
 	# Not really sure what this does...
 	app.use app.router
 
-	app.use (req, res, next) ->
-		console.log(req.body)
-		next()
-
 	# Setup routes
 	app.post "/login", routes.login.handle
 	app.post "/sync", routes.sync.handle
