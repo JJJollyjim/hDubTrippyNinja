@@ -1,4 +1,5 @@
 handle = (req, res) ->
-  res.send "Rendered Sync"
+	res.header "Content-Type", "application/json"
+	res.send "Rendered Sync"
 
 exports.handle = handle

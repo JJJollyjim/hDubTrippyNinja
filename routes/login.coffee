@@ -1,4 +1,5 @@
 handle = (req, res) ->
-  res.send "Rendered Login"
+	res.header "Content-Type", "application/json"
+	res.send "Rendered Login"
 
 exports.handle = handle
