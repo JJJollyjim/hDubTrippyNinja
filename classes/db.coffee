@@ -16,8 +16,15 @@ class pool
 				conn.release()
 				callback(rows)
 
+sharedInstance = (host, user, pass) ->
+	if !global.shared_db_pool? 
+		global.shared_db_pool = new pool host, user, pass
+
+	global.shared_db_pool
+
 queries =
 	test: "SELECT ? + ? AS result"
 
 exports.pool = pool
 exports.queries = queries
+exports.sharedInstance = sharedInstance
