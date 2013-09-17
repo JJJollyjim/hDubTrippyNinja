@@ -19,6 +19,10 @@ class pool
 				callback(rows)
 
 sharedInstance = (host, user, pass) ->
+	host = host ? process.env.db_host
+	user = user ? process.env.db_user
+	pass = pass ? process.env.db_pass
+
 	if !global.shared_db_pool? 
 		global.shared_db_pool = new pool host, user, pass
 
