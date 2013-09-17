@@ -41,6 +41,10 @@ else
 	app.post "/login", routes.login.handle
 	app.post "/sync", routes.sync.handle
 
+	app.get "/", (req, res) ->
+		res.send "Debug page"
+
+
 	# Error handler
 	if app.get "env" is "development" then app.use express.errorHandler()
 
