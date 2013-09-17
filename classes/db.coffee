@@ -13,6 +13,8 @@ class pool
 			throw new Error(err) if err?
 
 			conn.query query, args, (err, rows) ->
+				throw new Error(err) if err?
+
 				conn.release()
 				callback(rows)
 
