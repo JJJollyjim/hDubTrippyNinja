@@ -8,7 +8,7 @@ class pool
 			password: pass
 			database: 'kamar'
 
-	runquery: (query, args..., callback) ->
+	query: (query, args..., callback) ->
 		@pool.getConnection (err, conn) ->
 			throw new Error(err) if err?
 
@@ -23,13 +23,14 @@ sharedInstance = (host, user, pass) ->
 	user = user ? process.env.db_user
 	pass = pass ? process.env.db_pass
 
-	if !global.shared_db_pool? 
+	if !global.shared_db_pool?
 		global.shared_db_pool = new pool host, user, pass
 
 	global.shared_db_pool
 
 queries =
 	test: "SELECT ? + ? AS result"
+	school_data: "SELECT * FROM school WHERE id = ?"
 
 exports.pool = pool
 exports.queries = queries
