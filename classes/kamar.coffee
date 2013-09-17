@@ -29,11 +29,25 @@ class client
 			res.on "data", (chunk) ->
 				buffer += chunk
 			res.on "end", ->
-				xml2js.parseString buffer, (err, result) ->
+				xml2js.parseString buffer, {explicitRoot: false, explicitArray: false}, (err, result) ->
 					if err? then throw new Error err
+					if result.ErrorCode isnt "0" then throw new Error "KAMAR error"
 					callback result
 
 		req.write post_data
 		req.end()
 
+	authenticate: (callback) ->
+		@api_request {
+			Command: "Logon"
+			Key: "vtku"
+			Username: @user
+			Password: @pass
+		}, (result) ->
+			console.log result
+			if result.Success isnt "YES" then err = new Error("Login failed!")
+			@key = result.Key
+			console.log "KEY", @key
+
+			callback err
 exports.client = client
