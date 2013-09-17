@@ -12,12 +12,12 @@ class pool
 		@pool.getConnection (err, conn) ->
 			throw new Error(err) if err?
 
-			conn.query query, (err, rows) ->
+			conn.query query, args, (err, rows) ->
 				conn.release()
 				callback(rows)
 
 queries =
-	test: "SELECT 1 + 1 AS result"
+	test: "SELECT ? + ? AS result"
 
 exports.pool = pool
 exports.queries = queries
