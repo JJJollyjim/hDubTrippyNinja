@@ -2,6 +2,7 @@ cluster = require "cluster"
 express = require "express"
 http    = require "http"
 path    = require "path"
+toobusy = require "toobusy"
 
 if cluster.isMaster
 	cpus = require("os").cpus()
@@ -30,6 +31,11 @@ else
 
 	# Enable server logs
 	app.use express.logger("dev")
+
+	# Make server not melt if busy
+	app.use (req, res, next) ->
+		if toobusy() then res.send 503, "Server melting, try again later"
+		else next()
 
 	# Parses POST body
 	app.use express.bodyParser()
