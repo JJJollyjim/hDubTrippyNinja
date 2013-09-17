@@ -1,7 +1,7 @@
-express = require "express"
-http = require "http"
-path = require "path"
 cluster = require "cluster"
+express = require "express"
+http    = require "http"
+path    = require "path"
 
 if cluster.isMaster
 	cpus = require("os").cpus()
@@ -42,7 +42,7 @@ else
 	app.post "/sync", routes.sync.handle
 
 	# Error handler
-	if app.get("env") is "development" then app.use express.errorHandler()
+	if app.get "env" is "development" then app.use express.errorHandler()
 
 	# Start server
 	http.createServer(app).listen app.get("port"), ->
