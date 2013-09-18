@@ -43,7 +43,7 @@ class client
 			Key: "vtku"
 			Username: @user
 			Password: @pass
-		}, (result) ->
+		}, (result) =>
 			if result.Success isnt "YES" then err = new Error("Login failed!")
 			@key = result.Key
 
