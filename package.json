@@ -9,6 +9,7 @@
     "express": "3.4.0",
     "mysql": "~2.0.0-alpha9",
     "xml2js": "~0.2.8",
-    "toobusy": "~0.2.3"
+    "toobusy": "~0.2.3",
+    "wait.for": "~0.6.2"
   }
 }
