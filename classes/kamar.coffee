@@ -44,10 +44,8 @@ class client
 			Username: @user
 			Password: @pass
 		}, (result) ->
-			console.log result
 			if result.Success isnt "YES" then err = new Error("Login failed!")
 			@key = result.Key
-			console.log "KEY", @key
 
 			callback err
 exports.client = client
